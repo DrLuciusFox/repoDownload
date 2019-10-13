@@ -27,6 +27,25 @@ import sys
 global ncfilename
 global ncfiledesc
 
+
+def getBodyTextData(body):
+    bodyText = body.text.split('\n')[3::]
+    bodyText[:] = (value for value in bodyText if value != '')
+    myDict = {}
+    for ebt in bodyText:
+        eba = ebt.split(' ')
+        eba[:] = (value for value in eba if value != '')
+        if len(eba)!=4:
+            print('Error in bodyText')
+            exit(-1)
+        lmdt =  eba[1] + eba[2]
+        lmdt = lmdt.replace('-', '')
+        lmdt = lmdt.replace(':', '')
+        nDict = {eba[0]: (lmdt, eba[3])}
+        myDict.update(nDict)
+    return myDict
+
+
 def getDwnDirUrls(link, group):
     innrGrpKeys = list(group.groups.keys())
     grpVars0 = list(group.variables)
@@ -70,6 +89,9 @@ def getDwnDirUrls(link, group):
             soup = BeautifulSoup(source, 'lxml')
             body = soup.find('body')
             As = body.find_all('a')
+            
+            bodyDict = getBodyTextData(body)
+
             status = 1
 
             ddCount = 0
