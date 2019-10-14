@@ -100,16 +100,16 @@ def getDwnDirUrls(link, group):
 
             if status==1:
                 print(thisGrpName,': Complete and Status is', group.Status)
+                if 'Error' in group.ncattrs():
+                    del group.Error
             else:
                 print(thisGrpName,': Not yet complete and Status is', group.Status)
         except:
             errType = str(sys.exc_info()[0]).split("'")[1]
-            print('Stopped due to {} and status is {}'.format(errType, group.Status))
-            print('Returning 0')
-            
             group.Error = errType
             group.Status = 0
-    
+            print('Stopped due to {} and status is {}'.format(errType, group.Status))
+
     return group.Status
 
 
